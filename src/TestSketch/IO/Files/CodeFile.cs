@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TestSketch.IO.Files.Metadata;
+using TestSketch.Parsing.Code;
 
 namespace TestSketch.IO.Files
 {
@@ -42,11 +42,14 @@ namespace TestSketch.IO.Files
         /// Extracts the TypeMetadata from the file
         /// </summary>
         /// <returns>Each of the instances of TypeMetadata from each type contained within the file</returns>
-        private IEnumerable<TypeMetadata> ExtractTypes() => throw new NotImplementedException();
+        private IEnumerable<TypeMetadata> ExtractTypes()
+        {
+            string extension = System.IO.Path.GetExtension(Path);
+            IMetadataExtractor extractor = MetadataExtractorFactory.GetExtractor(extension);
+            extractor.ProcessCodeFile(Path);
+            return extractor.ExtractedMetadata;
+        }
 
-        /// <summary>
-        /// The loaded type metadata from within the file.
-        /// </summary>
         private IEnumerable<TypeMetadata> types = null;
     }
 }
