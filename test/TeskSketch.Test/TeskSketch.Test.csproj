@@ -13,4 +13,14 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IO\Config\" />
+    <Folder Include="IO\Files\" />
+    <Folder Include="IO\Shell\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TestSketch\TestSketch.csproj" />
+  </ItemGroup>
+
 </Project>

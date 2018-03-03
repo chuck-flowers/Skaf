@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -7,13 +6,13 @@ using TestSketch.IO.Files.Metadata;
 
 namespace TestSketch.Parsing.Code
 {
-    internal class CSharpMetadataExtractor : IMetadataExtractor
+    public class CSharpMetadataExtractor : IMetadataExtractor
     {
         public IEnumerable<TypeMetadata> ExtractedMetadata => walker.ExtractedMetadata;
 
-        public void ProcessCodeFile(string path)
+        public void ProcessCodeFile(string code)
         {
-            var root = CSharpSyntaxTree.ParseText(File.ReadAllText(path)).GetRoot();
+            var root = (CompilationUnitSyntax)CSharpSyntaxTree.ParseText(code).GetRoot();
             walker.Visit(root);
         }
 
@@ -21,9 +20,15 @@ namespace TestSketch.Parsing.Code
         {
             public LinkedList<TypeMetadata> ExtractedMetadata { get; } = new LinkedList<TypeMetadata>();
 
-            public override void VisitClassDeclaration(ClassDeclarationSyntax node) => ExtractTypeMetadata(node);
+            public override void VisitClassDeclaration(ClassDeclarationSyntax node)
+            {
+                ExtractTypeMetadata(node);
+            }
 
-            public override void VisitStructDeclaration(StructDeclarationSyntax node) => ExtractTypeMetadata(node);
+            public override void VisitStructDeclaration(StructDeclarationSyntax node)
+            {
+                ExtractTypeMetadata(node);
+            }
 
             private MethodMetadata ExtractMethodMetadata(MethodDeclarationSyntax node)
             {
