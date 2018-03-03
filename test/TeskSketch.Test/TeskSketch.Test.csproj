@@ -16,7 +16,6 @@
   <ItemGroup>
     <Folder Include="IO\Config\" />
     <Folder Include="IO\Files\" />
-    <Folder Include="IO\Shell\" />
   </ItemGroup>
 
   <ItemGroup>
