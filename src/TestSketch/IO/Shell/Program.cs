@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using CommandLine;
+﻿using System.IO;
 using TestSketch.IO.Config;
 
 namespace TestSketch.IO.Shell
@@ -10,16 +7,8 @@ namespace TestSketch.IO.Shell
     {
         public static void Main(string[] args)
         {
-            Parser.Default
-                .ParseArguments<CommandLineOptions>(args)
-                .WithParsed(Run)
-                .WithNotParsed(HandleParseError);
-        }
-
-        private static void HandleParseError(IEnumerable<Error> errors)
-        {
-            foreach (Error error in errors)
-                Console.WriteLine("There was an error: " + error);
+            CommandLineOptions options = CommandLineOptions.ParseArgs(args);
+            Run(options);
         }
 
         private static void Run(CommandLineOptions options)
