@@ -1,0 +1,24 @@
+using System;
+using System.IO;
+
+namespace Baz
+{
+    public class FooClass
+    {
+        public static void Main(string[] args)
+        {
+            Foo();
+            Bar();
+        }
+
+        private static void Foo()
+        {
+            //Do some stuff in here
+        }
+
+        private static void Bar()
+        {
+	    Console.WriteLine();
+        }
+    }
+}

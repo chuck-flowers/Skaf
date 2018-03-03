@@ -1,53 +1,36 @@
-﻿using TestSketch.Parsing.Code;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using TestSketch.Parsing.Code;
 using Xunit;
 
 namespace TeskSketch.Test.Parsing.Code
 {
     public class CSharpMetadataExtractorTest
     {
-        [Fact]
-        public void ProcessMetadata()
+        [Theory]
+        [InlineData("codeSnippet1.txt", new string[] { "Foo", "Bar" })]
+        public void ProcessMetadata(string codeFileName, IEnumerable<string> methodNames)
         {
+            //Extract metadata
             CSharpMetadataExtractor extractor = new CSharpMetadataExtractor();
+            string csharpCode = FetchCode(codeFileName);
             extractor.ProcessCodeFile(csharpCode);
 
-            bool containsFoo = false, containsBar = false;
-            foreach (var type in extractor.ExtractedMetadata)
-            {
-                foreach (var method in type.Methods)
-                {
-                    containsFoo |= method.Name.Equals("Foo");
-                    containsBar |= method.Name.Equals("Bar");
-                }
-            }
+            //Confirm all expected metadata
+            var methods = extractor.ExtractedMetadata.SelectMany(t => t.Methods).Select(m => m.Name);
+            bool containsAll = true;
+            foreach (string methodName in methodNames)
+                containsAll &= methods.Contains(methodName);
 
-            Assert.True(containsBar && containsFoo);
+            Assert.True(containsAll);
         }
 
-        private const string csharpCode =
-@"using System;
-using System.IO;
-
-namespace Baz
-{
-    public class FooClass
-    {
-        public static void Main(string[] args)
+        private string FetchCode(string codeFileName, [CallerFilePath] string testFilePath = "")
         {
-            Foo();
-            Bar();
+            string newPath = Path.Combine(Path.GetDirectoryName(testFilePath), codeFileName);
+            return File.ReadAllText(newPath);
         }
-
-        private static void Foo()
-        {
-            //Do some stuff in here
-        }
-
-        private static void Bar()
-        {
-            Console.WriteLine();
-        }
-    }
-}";
     }
 }
