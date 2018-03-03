@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using CommandLine;
+using TestSketch.IO.Config;
 
 namespace TestSketch.IO.Shell
 {
@@ -22,7 +24,9 @@ namespace TestSketch.IO.Shell
 
         private static void Run(CommandLineOptions options)
         {
-            Console.WriteLine("ConfigFile = " + options.ConfigFile);
+            //Loads the configuration
+            string configFileText = File.ReadAllText(options.ConfigFile);
+            Configuration config = ConfigurationSerializer.Deserialize(configFileText);
         }
     }
 }
