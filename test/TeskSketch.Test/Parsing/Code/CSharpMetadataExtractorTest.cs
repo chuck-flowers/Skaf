@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using TeskSketch.Test.SampleFiles.CSharp;
 using TestSketch.Parsing.Code;
 using Xunit;
 
@@ -15,7 +14,7 @@ namespace TeskSketch.Test.Parsing.Code
         {
             //Extract metadata
             CSharpMetadataExtractor extractor = new CSharpMetadataExtractor();
-            string csharpCode = FetchCode(codeFileName);
+            string csharpCode = CSharpFileFetcher.GetSampleCode(codeFileName);
             extractor.ProcessCodeFile(csharpCode);
 
             //Confirm all expected metadata
@@ -25,12 +24,6 @@ namespace TeskSketch.Test.Parsing.Code
                 containsAll &= methods.Contains(methodName);
 
             Assert.True(containsAll);
-        }
-
-        private string FetchCode(string codeFileName, [CallerFilePath] string testFilePath = "")
-        {
-            string newPath = Path.Combine(Path.GetDirectoryName(testFilePath), codeFileName);
-            return File.ReadAllText(newPath);
         }
     }
 }
