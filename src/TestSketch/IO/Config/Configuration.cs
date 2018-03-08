@@ -9,6 +9,10 @@ namespace TestSketch.IO.Config
     /// </summary>
     internal class Configuration
     {
+        /// <summary>
+        /// Represents the array of glob patterns that the user
+        /// supplies as input to TestSketch
+        /// </summary>
         [JsonProperty("src")]
         private IEnumerable<string> SourceFilePaths { get; set; }
     }
