@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using TestSketch.IO.Config;
+using TestSketch.Orchestration;
 
 namespace TestSketch.IO.Shell
 {
@@ -13,9 +14,9 @@ namespace TestSketch.IO.Shell
 
         private static void Run(CommandLineOptions options)
         {
-            //Loads the configuration
             string configFileText = File.ReadAllText(options.ConfigFile);
             Configuration config = ConfigurationSerializer.Deserialize(configFileText);
+            new ProcessOrchestrator().Execute(Directory.GetCurrentDirectory(), config);
         }
     }
 }
