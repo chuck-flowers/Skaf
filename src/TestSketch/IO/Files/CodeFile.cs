@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using TestSketch.IO.Files.Metadata;
 using TestSketch.Parsing.Code;
 
@@ -46,7 +47,7 @@ namespace TestSketch.IO.Files
         {
             string extension = System.IO.Path.GetExtension(Path);
             IMetadataExtractor extractor = MetadataExtractorFactory.GetExtractor(extension);
-            extractor.ProcessCodeFile(Path);
+            extractor.ProcessCodeFile(File.ReadAllText(Path));
             return extractor.ExtractedMetadata;
         }
 
