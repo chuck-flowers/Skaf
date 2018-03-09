@@ -18,16 +18,12 @@ namespace TestSketch.Parsing.Code
 
         private class CSharpMetadataWalker : CSharpSyntaxWalker
         {
-            public LinkedList<TypeMetadata> ExtractedMetadata { get; } = new LinkedList<TypeMetadata>();
+            public IEnumerable<TypeMetadata> ExtractedMetadata => extractedMetadata;
 
-            public override void VisitClassDeclaration(ClassDeclarationSyntax node)
+            public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
             {
-                ExtractTypeMetadata(node);
-            }
-
-            public override void VisitStructDeclaration(StructDeclarationSyntax node)
-            {
-                ExtractTypeMetadata(node);
+                foreach (var t in node.Members.OfType<TypeDeclarationSyntax>())
+                    ExtractTypeMetadata(node.Name.ToString(), t);
             }
 
             private MethodMetadata ExtractMethodMetadata(MethodDeclarationSyntax node)
@@ -36,7 +32,7 @@ namespace TestSketch.Parsing.Code
                 return new MethodMetadata(methodName);
             }
 
-            private void ExtractTypeMetadata(TypeDeclarationSyntax node)
+            private void ExtractTypeMetadata(string namespaceText, TypeDeclarationSyntax node)
             {
                 var typeName = node.Identifier.Text;
                 var methodData = new LinkedList<MethodMetadata>();
@@ -44,8 +40,10 @@ namespace TestSketch.Parsing.Code
                 foreach (MethodDeclarationSyntax methodNode in node.Members.Where(m => m is MethodDeclarationSyntax))
                     methodData.AddLast(ExtractMethodMetadata(methodNode));
 
-                ExtractedMetadata.AddLast(new TypeMetadata(typeName, methodData));
+                extractedMetadata.AddLast(new TypeMetadata(namespaceText, typeName, methodData));
             }
+
+            private LinkedList<TypeMetadata> extractedMetadata = new LinkedList<TypeMetadata>();
         }
 
         private CSharpMetadataWalker walker = new CSharpMetadataWalker();

@@ -17,7 +17,7 @@ namespace TestSketch.Orchestration
             IEnumerable<TypeMetadata> inputTypes = inputFiles.SelectMany(f => f.Types);
             foreach (var type in inputTypes)
             {
-                Console.WriteLine(type.Name);
+                Console.WriteLine("{0}.{1}", type.Namespace, type.Name);
                 foreach (var method in type.Methods)
                     Console.WriteLine("    {0}", method.Name);
             }

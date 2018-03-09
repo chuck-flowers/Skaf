@@ -11,11 +11,13 @@ namespace TestSketch.IO.Files.Metadata
         /// <summary>
         /// Constructs type metadata with the given name and method metadata
         /// </summary>
-        /// <param name="name">The name of the type</param>
+        /// <param name="namespaceName">The name of the namespace that the type is contained within</param>
+        /// <param name="typeName">The name of the type</param>
         /// <param name="methods">The metadata for each of the methods within the type</param>
-        public TypeMetadata(string name, IEnumerable<MethodMetadata> methods)
+        public TypeMetadata(string namespaceName, string typeName, IEnumerable<MethodMetadata> methods)
         {
-            Name = name;
+            Namespace = namespaceName;
+            Name = typeName;
             Methods = methods;
         }
 
@@ -29,5 +31,7 @@ namespace TestSketch.IO.Files.Metadata
         /// Returns the name of the type
         /// </summary>
         public string Name { get; }
+
+        public string Namespace { get; }
     }
 }
