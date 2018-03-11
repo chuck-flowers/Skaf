@@ -16,7 +16,7 @@ namespace TestSketch.IO.Shell
         {
             string configFileText = File.ReadAllText(options.ConfigFile);
             Configuration config = ConfigurationSerializer.Deserialize(configFileText);
-            new ProcessOrchestrator().Execute(Directory.GetCurrentDirectory(), config);
+            new ProcessOrchestrator(Directory.GetCurrentDirectory(), config).Execute();
         }
     }
 }
