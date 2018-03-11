@@ -21,9 +21,12 @@ namespace TestSketch.Orchestration
             IEnumerable<string> paths = Globber.ExpandPath(baseDir, configuration.SourceFilePaths);
             IEnumerable<SourceFile> inputFiles = paths.Select(p => new SourceFile(p));
             IEnumerable<TypeMetadata> inputTypes = inputFiles.SelectMany(f => f.Types);
-            IEnumerable<TestFile> testFiles = inputTypes.Select(t => testFileMapper.MapTypeToTestFile(t));
-            foreach (var testFile in testFiles)
-                Console.WriteLine(testFile.Path);
+            IEnumerable<(TypeMetadata, TestFile)> typeToTestFiles = inputTypes.Select(t => (t, testFileMapper.MapTypeToTestFile(t)));
+            foreach (var pair in typeToTestFiles)
+            {
+                (var type, var testFile) = pair;
+                Console.WriteLine("{0}.{1} -> {2}", type.Namespace, type.Name, testFile.Path);
+            }
         }
     }
 }
