@@ -5,8 +5,8 @@ namespace TestSketch.IO.Shell
 {
     public class CommandLineOptions
     {
-        [Option('c', "config", Required = true, HelpText = "The file that contains the configuration for how the tests are generated")]
-        public string ConfigFile { get; set; }
+        [Option('c', "config", HelpText = "The file that contains the configuration for how the tests are generated")]
+        public string ConfigFile { get; set; } = "config.json";
 
         /// <summary>
         /// Parses the arguments passed to the command line and returns the constructed object
