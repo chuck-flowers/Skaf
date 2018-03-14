@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Skaf.IO.Config;
 using Skaf.IO.Files;
 using Skaf.IO.Files.Mapping;
 using Skaf.IO.Files.Metadata;
+using Skaf.IO.Files.Writers;
 using Skaf.Parsing.Config;
 
 namespace Skaf.Orchestration
@@ -25,7 +25,8 @@ namespace Skaf.Orchestration
             foreach (var pair in mappings)
             {
                 (var type, var testFile) = pair;
-                Console.WriteLine("{0}.{1} -> {2}", type.Namespace, type.Name, testFile.Path);
+                TestFileWriter writer = new TestFileWriter(type, testFile);
+                writer.Write();
             }
         }
 
