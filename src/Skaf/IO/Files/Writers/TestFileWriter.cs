@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -38,13 +40,22 @@ namespace Skaf.IO.Files.Writers
                 .AddUsings(
                     UsingDirective(IdentifierName("System")),
                     UsingDirective(IdentifierName("System.Collections")),
-                    UsingDirective(IdentifierName("System.Collections.Generic"))
+                    UsingDirective(IdentifierName("System.Collections.Generic")),
+                    UsingDirective(IdentifierName("Xunit"))
                 ).AddMembers(
                     CreateNameSpaceSyntax()
                 );
 
+        [MethodImpl(MethodCodeType = MethodCodeType.IL)]
         private MethodDeclarationSyntax CreateMethodSyntax(MethodMetadata methodMetadata) =>
             MethodDeclaration(PredefinedType(Token(SyntaxKind.VoidKeyword)), Identifier(methodMetadata.Name + "Test"))
+                .AddAttributeLists(
+                    AttributeList(
+                        SingletonSeparatedList(
+                            Attribute(IdentifierName("Fact"))
+                        )
+                    )
+                )
                 .AddBodyStatements(CreateThrowStatementSyntax());
 
         private NamespaceDeclarationSyntax CreateNameSpaceSyntax() =>
@@ -53,6 +64,7 @@ namespace Skaf.IO.Files.Writers
 
         private ClassDeclarationSyntax CreateTestClass()
         {
+            object o = new object();
             var c = ClassDeclaration(Type.Name + "Tests")
                 .AddModifiers(Token(SyntaxKind.PublicKeyword));
 
@@ -63,6 +75,12 @@ namespace Skaf.IO.Files.Writers
         }
 
         private ThrowStatementSyntax CreateThrowStatementSyntax() =>
-            ThrowStatement(ObjectCreationExpression(IdentifierName("NotImplementedException")));
+            ThrowStatement(
+                ObjectCreationExpression(
+                    IdentifierName(nameof(NotImplementedException))
+                ).WithArgumentList(
+                    ArgumentList()
+                )
+            );
     }
 }
