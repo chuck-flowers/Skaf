@@ -34,10 +34,17 @@ namespace Skaf.Parsing.Code
 
             private void ExtractTypeMetadata(string namespaceText, TypeDeclarationSyntax node)
             {
+                //If the type isn't public, don't extract metadata for it
+                if (!node.Modifiers.Any(mod => mod.Kind() == SyntaxKind.PublicKeyword))
+                    return;
+
                 var typeName = node.Identifier.Text;
                 var methodData = new LinkedList<MethodMetadata>();
 
-                foreach (MethodDeclarationSyntax methodNode in node.Members.Where(m => m is MethodDeclarationSyntax))
+                var publicMethods = node.Members
+                    .OfType<MethodDeclarationSyntax>()
+                    .Where(m => m.Modifiers.Any(mod => mod.Kind() == SyntaxKind.PublicKeyword));
+                foreach (MethodDeclarationSyntax methodNode in publicMethods)
                     methodData.AddLast(ExtractMethodMetadata(methodNode));
 
                 extractedMetadata.AddLast(new TypeMetadata(namespaceText, typeName, methodData));
