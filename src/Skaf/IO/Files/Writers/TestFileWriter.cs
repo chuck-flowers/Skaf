@@ -47,8 +47,8 @@ namespace Skaf.IO.Files.Writers
             var oldUsings = compilationUnit.Usings;
             var newUsings = oldUsings;
 
-            bool uSystem, uSystemCollections, uSystemCollectionsGeneric, uXunit;
-            uSystem = uSystemCollections = uSystemCollectionsGeneric = uXunit = false;
+            bool uSystem, uXunit;
+            uSystem = uXunit = false;
 
             //Detect usings
             foreach (var u in oldUsings)
@@ -59,14 +59,6 @@ namespace Skaf.IO.Files.Writers
                 {
                     case "System":
                         uSystem = true;
-                        break;
-
-                    case "System.Collections":
-                        uSystemCollections = true;
-                        break;
-
-                    case "System.Collections.Generics":
-                        uSystemCollectionsGeneric = true;
                         break;
 
                     case "Xunit":
@@ -80,20 +72,6 @@ namespace Skaf.IO.Files.Writers
             {
                 newUsings = newUsings.Add(
                     UsingDirective(IdentifierName("System"))
-                );
-            }
-
-            if (!uSystemCollections)
-            {
-                newUsings = newUsings.Add(
-                    UsingDirective(IdentifierName("System.Collections"))
-                );
-            }
-
-            if (!uSystemCollectionsGeneric)
-            {
-                newUsings = newUsings.Add(
-                    UsingDirective(IdentifierName("System.Collections.Generic"))
                 );
             }
 
