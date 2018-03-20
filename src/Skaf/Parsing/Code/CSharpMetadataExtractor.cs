@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Skaf.IO.Files.Metadata;
+using Skaf.IO.SourceCode.Metadata;
 
 namespace Skaf.Parsing.Code
 {

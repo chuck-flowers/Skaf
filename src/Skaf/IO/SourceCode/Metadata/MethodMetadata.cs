@@ -1,4 +1,4 @@
-﻿namespace Skaf.IO.Files.Metadata
+﻿namespace Skaf.IO.SourceCode.Metadata
 {
     /// <summary>
     /// Represents all the metadata for a method that is

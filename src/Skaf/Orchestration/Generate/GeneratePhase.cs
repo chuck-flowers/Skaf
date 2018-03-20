@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Skaf.IO.Files;
-using Skaf.IO.Files.Metadata;
-using Skaf.IO.Files.Writers;
+using Skaf.IO.SourceCode;
+using Skaf.IO.SourceCode.Metadata;
+using Skaf.IO.SourceCode.Writers;
 
 namespace Skaf.Orchestration.Generate
 {

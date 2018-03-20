@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Skaf.IO.Files;
-using Skaf.IO.Files.Mapping;
-using Skaf.IO.Files.Metadata;
+using Skaf.IO.SourceCode;
+using Skaf.IO.SourceCode.Mapping;
+using Skaf.IO.SourceCode.Metadata;
 
 namespace Skaf.Orchestration.Map
 {

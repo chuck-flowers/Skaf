@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Skaf.IO.Files.Metadata
+namespace Skaf.IO.SourceCode.Metadata
 {
     /// <summary>
     /// Represents the pertinent metadata about a type extracted

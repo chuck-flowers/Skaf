@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Skaf.IO.Files.Metadata;
+using Skaf.IO.SourceCode.Metadata;
 
 namespace Skaf.Parsing.Code
 {

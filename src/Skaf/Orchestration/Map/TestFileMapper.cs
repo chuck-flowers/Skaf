@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Skaf.IO.Files.Metadata;
+using Skaf.IO.SourceCode.Metadata;
 
-namespace Skaf.IO.Files.Mapping
+namespace Skaf.IO.SourceCode.Mapping
 {
     /// <summary>
     /// The class that is responsible for creating the test

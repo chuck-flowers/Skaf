@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using Skaf.IO.Config.Input;
-using Skaf.IO.Files;
-using Skaf.IO.Files.Metadata;
+using Skaf.IO.SourceCode;
+using Skaf.IO.SourceCode.Metadata;
 using Skaf.Parsing.Config;
 
 namespace Skaf.Orchestration.Input

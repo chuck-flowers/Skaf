@@ -5,11 +5,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
-using Skaf.IO.Files.Metadata;
+using Skaf.IO.SourceCode.Metadata;
 
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace Skaf.IO.Files.Writers
+namespace Skaf.IO.SourceCode.Writers
 {
     public class TestFileWriter
     {

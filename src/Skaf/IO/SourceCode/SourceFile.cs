@@ -1,4 +1,4 @@
-﻿namespace Skaf.IO.Files
+﻿namespace Skaf.IO.SourceCode
 {
     public class SourceFile : CodeFile
     {

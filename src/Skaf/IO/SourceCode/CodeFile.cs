@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Skaf.IO.Files.Metadata;
+using Skaf.IO.SourceCode.Metadata;
 using Skaf.Parsing.Code;
 
-namespace Skaf.IO.Files
+namespace Skaf.IO.SourceCode
 {
     /// <summary>
     /// Represents a file that contains source code
