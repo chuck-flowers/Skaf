@@ -54,7 +54,15 @@ namespace Skaf.Orchestration
         /// <returns>The files to act upon</returns>
         private IEnumerable<TypeMetadata> ProcessInputFiles()
         {
-            return Globber.ExpandPath(BaseDirectory, Configuration.SourceFilePaths)
+            ICollection<string> globStrings = new List<string>();
+            foreach (var rule in Configuration.InputConfig.SourceFileRules)
+            {
+                string baseGlobPath = Configuration.InputConfig.SourcePath;
+                string fullGlobString = Path.Combine(baseGlobPath, rule.Include);
+                globStrings.Add(fullGlobString);
+            }
+
+            return Globber.ExpandPath(BaseDirectory, globStrings)
                 .Select(p => new SourceFile(p))
                 .SelectMany(t => t.Types);
         }

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Skaf.IO.Config.Input;
 
 namespace Skaf.IO.Config
 {
@@ -13,7 +13,7 @@ namespace Skaf.IO.Config
         /// Represents the array of glob patterns that the user
         /// supplies as input to TestSketch
         /// </summary>
-        [JsonProperty("src")]
-        public IEnumerable<string> SourceFilePaths { get; set; }
+        [JsonProperty("input")]
+        public InputConfiguration InputConfig { get; set; }
     }
 }
