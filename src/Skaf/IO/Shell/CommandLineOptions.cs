@@ -6,7 +6,7 @@ namespace Skaf.IO.Shell
     public class CommandLineOptions
     {
         [Option('c', "config", HelpText = "The file that contains the configuration for how the tests are generated")]
-        public string ConfigFile { get; set; } = "config.json";
+        public string ConfigFile { get; set; } = "skaf.json";
 
         /// <summary>
         /// Parses the arguments passed to the command line and returns the constructed object
