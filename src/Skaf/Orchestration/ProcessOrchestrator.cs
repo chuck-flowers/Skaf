@@ -1,5 +1,5 @@
 ﻿using Skaf.IO.Config;
-using Skaf.IO.Files.Writers;
+using Skaf.Orchestration.Generate;
 using Skaf.Orchestration.Input;
 using Skaf.Orchestration.Map;
 
@@ -17,12 +17,7 @@ namespace Skaf.Orchestration
         {
             var inputTypes = new InputPhase(BaseDirectory, Configuration.InputConfig).Execute();
             var mappings = new MapPhase(inputTypes).Execute();
-            foreach (var pair in mappings)
-            {
-                (var type, var testFile) = pair;
-                TestFileWriter writer = new TestFileWriter(type, testFile);
-                writer.Write();
-            }
+            new GeneratePhase(mappings).Execute();
         }
 
         private string BaseDirectory { get; }
