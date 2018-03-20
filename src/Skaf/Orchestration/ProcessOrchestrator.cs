@@ -6,7 +6,7 @@ using Skaf.IO.Files;
 using Skaf.IO.Files.Mapping;
 using Skaf.IO.Files.Metadata;
 using Skaf.IO.Files.Writers;
-using Skaf.Parsing.Config;
+using Skaf.Orchestration.Input;
 
 namespace Skaf.Orchestration
 {
@@ -20,7 +20,7 @@ namespace Skaf.Orchestration
 
         public void Execute()
         {
-            var inputTypes = ProcessInputFiles();
+            var inputTypes = new InputPhase(BaseDirectory, Configuration.InputConfig).Execute();
             var mappings = MapToTestFiles(inputTypes);
             foreach (var pair in mappings)
             {
@@ -46,25 +46,6 @@ namespace Skaf.Orchestration
             TestFileMapper testFileMapper = new TestFileMapper(testProjectRoot);
 
             return types.Select(t => (t, testFileMapper.MapTypeToTestFile(t)));
-        }
-
-        /// <summary>
-        /// Determines the type definitions to act upon
-        /// </summary>
-        /// <returns>The files to act upon</returns>
-        private IEnumerable<TypeMetadata> ProcessInputFiles()
-        {
-            ICollection<string> globStrings = new List<string>();
-            foreach (var rule in Configuration.InputConfig.SourceFileRules)
-            {
-                string baseGlobPath = Configuration.InputConfig.SourcePath;
-                string fullGlobString = Path.Combine(baseGlobPath, rule.Include);
-                globStrings.Add(fullGlobString);
-            }
-
-            return Globber.ExpandPath(BaseDirectory, globStrings)
-                .Select(p => new SourceFile(p))
-                .SelectMany(t => t.Types);
         }
     }
 }
