@@ -5,13 +5,13 @@ namespace Skaf.Test.SampleFiles.CSharp
 {
     internal static class CSharpFileFetcher
     {
-        public static string GetSampleCode(string fileName) =>
+        public static string GetSampleFile(string fileName) =>
             GetSampleCodeContent(fileName);
 
         private static string GetSampleCodeContent(string fileName, [CallerFilePath] string thisFilePath = "")
         {
             string thisDirectory = Path.GetDirectoryName(thisFilePath);
-            return File.ReadAllText(Path.Combine(thisDirectory, fileName));
+            return Path.Combine(thisDirectory, fileName);
         }
     }
 }

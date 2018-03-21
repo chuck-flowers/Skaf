@@ -11,12 +11,12 @@ namespace Baz
             Bar();
         }
 
-        private static void Foo()
+        public static void Foo()
         {
             //Do some stuff in here
         }
 
-        private static void Bar()
+        public static void Bar()
         {
 	        Console.WriteLine();
         }

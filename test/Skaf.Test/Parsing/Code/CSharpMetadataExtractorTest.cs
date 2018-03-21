@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Skaf.Test.SampleFiles.CSharp;
+using Skaf.IO.SourceCode;
 using Skaf.Parsing.Code;
+using Skaf.Test.SampleFiles.CSharp;
 using Xunit;
 
 namespace Skaf.Test.Parsing.Code
@@ -14,11 +15,12 @@ namespace Skaf.Test.Parsing.Code
         {
             //Extract metadata
             CSharpMetadataExtractor extractor = new CSharpMetadataExtractor();
-            string csharpCode = CSharpFileFetcher.GetSampleCode(codeFileName);
-            extractor.ProcessCodeFile(csharpCode);
+            string cSharpCodePath = CSharpFileFetcher.GetSampleFile(codeFileName);
+            SourceFile sourceFile = new SourceFile(cSharpCodePath);
+            extractor.ProcessCodeFile(sourceFile);
 
             //Confirm all expected metadata
-            var methods = extractor.ExtractedMetadata.SelectMany(t => t.Methods).Select(m => m.Name);
+            var methods = extractor.ExtractedMetadata.Select(m => m.Name);
             bool containsAll = true;
             foreach (string methodName in methodNames)
                 containsAll &= methods.Contains(methodName);
