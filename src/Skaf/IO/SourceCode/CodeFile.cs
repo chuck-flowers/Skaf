@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Skaf.IO.SourceCode.Metadata;
 using Skaf.Parsing.Code;
 
@@ -24,6 +23,12 @@ namespace Skaf.IO.SourceCode
         public string Directory => System.IO.Path.GetDirectoryName(Path);
 
         /// <summary>
+        /// All the TypeMetadata contained within the specified code file.
+        /// The data is lazy loaded from the file.
+        /// </summary>
+        public IEnumerable<MethodMetadata> Methods => methods ?? (methods = ExtractMethods());
+
+        /// <summary>
         /// The name of the file without the directory
         /// </summary>
         public string Name => System.IO.Path.GetFileName(Path);
@@ -34,23 +39,17 @@ namespace Skaf.IO.SourceCode
         public string Path { get; }
 
         /// <summary>
-        /// All the TypeMetadata contained within the specified code file.
-        /// The data is lazy loaded from the file.
-        /// </summary>
-        public IEnumerable<TypeMetadata> Types => types ?? (types = ExtractTypes());
-
-        /// <summary>
         /// Extracts the TypeMetadata from the file
         /// </summary>
         /// <returns>Each of the instances of TypeMetadata from each type contained within the file</returns>
-        private IEnumerable<TypeMetadata> ExtractTypes()
+        private IEnumerable<MethodMetadata> ExtractMethods()
         {
             string extension = System.IO.Path.GetExtension(Path);
             IMetadataExtractor extractor = MetadataExtractorFactory.GetExtractor(extension);
-            extractor.ProcessCodeFile(File.ReadAllText(Path));
+            extractor.ProcessCodeFile(this);
             return extractor.ExtractedMetadata;
         }
 
-        private IEnumerable<TypeMetadata> types = null;
+        private IEnumerable<MethodMetadata> methods = null;
     }
 }

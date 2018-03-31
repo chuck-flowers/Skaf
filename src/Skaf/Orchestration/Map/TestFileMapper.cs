@@ -29,14 +29,14 @@ namespace Skaf.IO.SourceCode.Mapping
         /// Returns the test file that is associated with the
         /// given type
         /// </summary>
-        /// <param name="type">The type to determine the test file for</param>
+        /// <param name="methodMetadata">The type to determine the test file for</param>
         /// <returns>The test file that should contain the tests for the specified type</returns>
-        public TestFile MapTypeToTestFile(TypeMetadata type)
+        public TestFile MapMethodToTestFile(MethodMetadata methodMetadata)
         {
             List<string> paths = new List<string>();
             paths.Add(BaseDirectory);
-            paths.AddRange(type.Namespace.Split('.'));
-            paths.Add(type.Name + "Tests.cs");
+            paths.AddRange(methodMetadata.ParentType.Namespace.Split('.'));
+            paths.Add(methodMetadata.Name + "Tests.cs");
 
             string pathToTestFile = Path.Combine(paths.ToArray());
             return new TestFile(pathToTestFile);

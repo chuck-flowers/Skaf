@@ -7,6 +7,6 @@ namespace Skaf.IO.Config.Map
     public class MapConfiguration
     {
         [JsonProperty("rules")]
-        public IEnumerable<MappingRule> MappingRules { get; set; }
+        public IEnumerable<MappingRule> MappingRules { get; set; } = new List<MappingRule>() { new MappingRule() };
     }
 }

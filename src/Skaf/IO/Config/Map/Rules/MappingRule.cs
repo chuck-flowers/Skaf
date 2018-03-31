@@ -5,9 +5,9 @@ namespace Skaf.IO.Config.Map.Rules
     public class MappingRule
     {
         [JsonProperty("input")]
-        public TypeMatcher Input { get; set; }
+        public MethodMatcher Input { get; set; } = new MethodMatcher();
 
         [JsonProperty("output")]
-        public TestGenerator Output { get; set; }
+        public TestGenerator Output { get; set; } = new TestGenerator();
     }
 }

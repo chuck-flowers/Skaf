@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using Skaf.IO.SourceCode;
 using Skaf.IO.SourceCode.Metadata;
 
 namespace Skaf.Parsing.Code
 {
     internal interface IMetadataExtractor
     {
-        IEnumerable<TypeMetadata> ExtractedMetadata { get; }
+        IEnumerable<MethodMetadata> ExtractedMetadata { get; }
 
-        void ProcessCodeFile(string path);
+        void ProcessCodeFile(CodeFile path);
     }
 }

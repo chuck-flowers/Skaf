@@ -1,4 +1,5 @@
-﻿using Skaf.IO.Config;
+﻿using System.Linq;
+using Skaf.IO.Config;
 using Skaf.Orchestration.Generate;
 using Skaf.Orchestration.Input;
 using Skaf.Orchestration.Map;
@@ -15,9 +16,9 @@ namespace Skaf.Orchestration
 
         public void Execute()
         {
-            var inputTypes = new InputPhase(BaseDirectory, Configuration.InputConfig).Execute();
-            var mappings = new MapPhase(inputTypes).Execute();
-            new GeneratePhase(mappings).Execute();
+            var inputTypes = new InputPhase(BaseDirectory, Configuration.InputConfig).Execute().ToList();
+            var mappings = new MapPhase(inputTypes, Configuration.MapConfig).Execute().ToList();
+            new GeneratePhase(mappings, Configuration.GenerateConfig).Execute();
         }
 
         private string BaseDirectory { get; }

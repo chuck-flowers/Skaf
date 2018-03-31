@@ -1,28 +1,47 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Skaf.IO.SourceCode;
-using Skaf.IO.SourceCode.Mapping;
+using Skaf.IO.Config.Map;
 using Skaf.IO.SourceCode.Metadata;
 
 namespace Skaf.Orchestration.Map
 {
     public class MapPhase
     {
-        public MapPhase(IEnumerable<TypeMetadata> types)
+        public MapPhase(IEnumerable<MethodMetadata> types, MapConfiguration mapConfig)
         {
-            Types = types;
+            MapConfig = mapConfig ?? throw new ArgumentNullException(nameof(mapConfig));
+            Types = types ?? throw new ArgumentNullException(nameof(types));
         }
 
-        public IEnumerable<TypeMetadata> Types { get; }
+        public MapConfiguration MapConfig { get; }
 
-        public IEnumerable<(TypeMetadata, TestFile)> Execute()
+        public IEnumerable<MethodMetadata> Types { get; }
+
+        public IEnumerable<(MethodMetadata, MethodMetadata)> Execute()
         {
+            Console.WriteLine("MAP");
             var testProjectRoot = Path.Combine("..", "..", "test");
             testProjectRoot = Path.GetFullPath(testProjectRoot);
-            TestFileMapper testFileMapper = new TestFileMapper(testProjectRoot);
 
-            return Types.Select(t => (t, testFileMapper.MapTypeToTestFile(t)));
+            var toRet = Types.Select(m => (m, MakeTestMethod(m)));
+
+            foreach (var (method, test) in toRet)
+                Console.WriteLine($"Mapped {method} => {test}");
+            Console.WriteLine();
+
+            return toRet;
+        }
+
+        private MethodMetadata MakeTestMethod(MethodMetadata sourceMethod)
+        {
+            foreach (var rule in MapConfig.MappingRules)
+                if (rule.Input.Matches(sourceMethod))
+                    return rule.Output.GenerateTest(sourceMethod);
+
+            //TODO: Throw exception
+            return null;
         }
     }
 }

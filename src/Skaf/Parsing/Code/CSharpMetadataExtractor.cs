@@ -1,24 +1,30 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Skaf.IO.SourceCode;
 using Skaf.IO.SourceCode.Metadata;
 
 namespace Skaf.Parsing.Code
 {
     public class CSharpMetadataExtractor : IMetadataExtractor
     {
-        public IEnumerable<TypeMetadata> ExtractedMetadata => walker.ExtractedMetadata;
+        public IEnumerable<MethodMetadata> ExtractedMetadata => walker.ExtractedMetadata;
 
-        public void ProcessCodeFile(string code)
+        public void ProcessCodeFile(CodeFile code)
         {
-            var root = (CompilationUnitSyntax)CSharpSyntaxTree.ParseText(code).GetRoot();
+            var codeText = File.ReadAllText(code.Path);
+            var root = (CompilationUnitSyntax)CSharpSyntaxTree.ParseText(codeText).GetRoot();
+            walker.CodeFile = code;
             walker.Visit(root);
         }
 
         private class CSharpMetadataWalker : CSharpSyntaxWalker
         {
-            public IEnumerable<TypeMetadata> ExtractedMetadata => extractedMetadata;
+            public CodeFile CodeFile { get; set; }
+
+            public IEnumerable<MethodMetadata> ExtractedMetadata => extractedMetadata;
 
             public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
             {
@@ -26,10 +32,10 @@ namespace Skaf.Parsing.Code
                     ExtractTypeMetadata(node.Name.ToString(), t);
             }
 
-            private MethodMetadata ExtractMethodMetadata(MethodDeclarationSyntax node)
+            private MethodMetadata ExtractMethodMetadata(MethodDeclarationSyntax node, TypeMetadata parentType)
             {
                 var methodName = node.Identifier.Text;
-                return new MethodMetadata(methodName);
+                return new MethodMetadata(methodName, parentType);
             }
 
             private void ExtractTypeMetadata(string namespaceText, TypeDeclarationSyntax node)
@@ -39,18 +45,16 @@ namespace Skaf.Parsing.Code
                     return;
 
                 var typeName = node.Identifier.Text;
-                var methodData = new LinkedList<MethodMetadata>();
+                var typeMetadata = new TypeMetadata(CodeFile.Path, namespaceText, typeName);
 
                 var publicMethods = node.Members
                     .OfType<MethodDeclarationSyntax>()
                     .Where(m => m.Modifiers.Any(mod => mod.Kind() == SyntaxKind.PublicKeyword));
                 foreach (MethodDeclarationSyntax methodNode in publicMethods)
-                    methodData.AddLast(ExtractMethodMetadata(methodNode));
-
-                extractedMetadata.AddLast(new TypeMetadata(namespaceText, typeName, methodData));
+                    extractedMetadata.AddLast(ExtractMethodMetadata(methodNode, typeMetadata));
             }
 
-            private LinkedList<TypeMetadata> extractedMetadata = new LinkedList<TypeMetadata>();
+            private LinkedList<MethodMetadata> extractedMetadata = new LinkedList<MethodMetadata>();
         }
 
         private CSharpMetadataWalker walker = new CSharpMetadataWalker();

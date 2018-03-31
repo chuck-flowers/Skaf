@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
-using Skaf.IO.SourceCode;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Skaf.IO.Config.Generate;
 using Skaf.IO.SourceCode.Metadata;
 using Skaf.IO.SourceCode.Writers;
 
@@ -7,20 +9,23 @@ namespace Skaf.Orchestration.Generate
 {
     public class GeneratePhase
     {
-        public GeneratePhase(IEnumerable<(TypeMetadata, TestFile)> mappings)
+        public GeneratePhase(IEnumerable<(MethodMetadata, MethodMetadata)> mappings, GenerateConfiguration generateConfig)
         {
             Mappings = mappings;
+            GenerateConfig = generateConfig ?? throw new ArgumentNullException(nameof(generateConfig));
         }
 
-        public IEnumerable<(TypeMetadata, TestFile)> Mappings { get; }
+        public GenerateConfiguration GenerateConfig { get; }
+
+        public IEnumerable<(MethodMetadata, MethodMetadata)> Mappings { get; }
 
         public void Execute()
         {
-            foreach (var pair in Mappings)
+            foreach (var (method, test) in Mappings)
             {
-                (var type, var testFile) = pair;
-                TestFileWriter writer = new TestFileWriter(type, testFile);
-                writer.Write();
+                string fullPath = Path.GetFullPath(Path.Combine(GenerateConfig.Root, test.ParentType.Path));
+                TestFileWriter writer = new TestFileWriter(fullPath);
+                writer.Write(method);
             }
         }
     }

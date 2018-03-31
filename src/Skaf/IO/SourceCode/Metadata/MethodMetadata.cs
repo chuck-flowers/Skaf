@@ -10,14 +10,19 @@
         /// Constructs method metadata from the given name
         /// </summary>
         /// <param name="name">The name of the method</param>
-        public MethodMetadata(string name)
+        public MethodMetadata(string name, TypeMetadata parentType)
         {
             Name = name;
+            ParentType = parentType;
         }
 
         /// <summary>
         /// The name of the method
         /// </summary>
         public string Name { get; }
+
+        public TypeMetadata ParentType { get; }
+
+        public override string ToString() => $"{ParentType.Namespace}.{ParentType.Name}.{Name}";
     }
 }

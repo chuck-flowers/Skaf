@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Skaf.IO.SourceCode.Metadata
+﻿namespace Skaf.IO.SourceCode.Metadata
 {
     /// <summary>
     /// Represents the pertinent metadata about a type extracted
@@ -14,18 +12,12 @@ namespace Skaf.IO.SourceCode.Metadata
         /// <param name="namespaceName">The name of the namespace that the type is contained within</param>
         /// <param name="typeName">The name of the type</param>
         /// <param name="methods">The metadata for each of the methods within the type</param>
-        public TypeMetadata(string namespaceName, string typeName, IEnumerable<MethodMetadata> methods)
+        public TypeMetadata(string path, string namespaceName, string typeName)
         {
+            Path = path;
             Namespace = namespaceName;
             Name = typeName;
-            Methods = methods;
         }
-
-        /// <summary>
-        /// Returns the metadata for each of the methods contained
-        /// within the type
-        /// </summary>
-        public IEnumerable<MethodMetadata> Methods { get; }
 
         /// <summary>
         /// Returns the name of the type
@@ -33,5 +25,7 @@ namespace Skaf.IO.SourceCode.Metadata
         public string Name { get; }
 
         public string Namespace { get; }
+
+        public string Path { get; }
     }
 }

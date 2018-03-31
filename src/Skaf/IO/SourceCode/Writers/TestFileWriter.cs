@@ -13,29 +13,30 @@ namespace Skaf.IO.SourceCode.Writers
 {
     public class TestFileWriter
     {
-        public TestFileWriter(TypeMetadata type, TestFile testFile)
+        public TestFileWriter(string testFilePath)
         {
-            Type = type;
-            TestFile = testFile;
+            TestFilePath = testFilePath ?? throw new ArgumentNullException(nameof(testFilePath));
         }
 
-        public TestFile TestFile { get; }
+        public MethodMetadata Test { get; private set; }
 
-        public TypeMetadata Type { get; }
+        public string TestFilePath { get; }
 
-        public void Write()
+        public void Write(MethodMetadata test)
         {
+            Test = test;
+
             //Create the structure
             CompilationUnitSyntax compilationUnit = null;
-            if (File.Exists(TestFile.Path))
-                compilationUnit = (CompilationUnitSyntax)CSharpSyntaxTree.ParseText(File.ReadAllText(TestFile.Path)).GetRoot();
+            if (File.Exists(TestFilePath))
+                compilationUnit = (CompilationUnitSyntax)CSharpSyntaxTree.ParseText(File.ReadAllText(TestFilePath)).GetRoot();
 
             compilationUnit = CreateCompilationUnit(compilationUnit);
 
             //Write the structure
             var formatted = Formatter.Format(compilationUnit, new AdhocWorkspace());
-            Directory.CreateDirectory(TestFile.Directory);
-            using (var writer = File.CreateText(TestFile.Path))
+            Directory.CreateDirectory(Path.GetDirectoryName(TestFilePath));
+            using (var writer = File.CreateText(TestFilePath))
                 formatted.WriteTo(writer);
         }
 
@@ -101,7 +102,7 @@ namespace Skaf.IO.SourceCode.Writers
         {
             return MethodDeclaration(
                 PredefinedType(Token(SyntaxKind.VoidKeyword)),
-                Identifier(methodMetadata.Name + "Test"))
+                Identifier(methodMetadata.Name))
                     .AddAttributeLists(
                         AttributeList(
                             SingletonSeparatedList(
@@ -116,7 +117,7 @@ namespace Skaf.IO.SourceCode.Writers
         private NamespaceDeclarationSyntax CreateNameSpaceSyntax(NamespaceDeclarationSyntax namespaceDeclaration)
         {
             if (namespaceDeclaration == null)
-                namespaceDeclaration = NamespaceDeclaration(IdentifierName(Type.Namespace));
+                namespaceDeclaration = NamespaceDeclaration(IdentifierName(Test.ParentType.Namespace));
 
             var oldMembers = namespaceDeclaration.Members;
             var oldClass = oldMembers
@@ -133,17 +134,14 @@ namespace Skaf.IO.SourceCode.Writers
 
         private ClassDeclarationSyntax CreateTestClass(ClassDeclarationSyntax classDeclaration)
         {
+            //If the class declaration does not already exist, create it
             if (classDeclaration == null)
-                classDeclaration = ClassDeclaration(Type.Name + "Tests")
+                classDeclaration = ClassDeclaration(Test.ParentType.Name)
                     .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)));
 
-            foreach (var m in Type.Methods)
-            {
-                if (classDeclaration.Members.OfType<MethodDeclarationSyntax>().Any(d => d.Identifier.Text.Equals(m.Name + "Test")))
-                    continue;
-                else
-                    classDeclaration = classDeclaration.AddMembers(CreateMethodSyntax(m));
-            }
+            //If the type does not already have a definition for the method, create one
+            if (!classDeclaration.Members.OfType<MethodDeclarationSyntax>().Any(d => d.Identifier.Text.Equals(Test.Name)))
+                classDeclaration = classDeclaration.AddMembers(CreateMethodSyntax(Test));
 
             return classDeclaration;
         }
