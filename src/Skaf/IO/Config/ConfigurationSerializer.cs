@@ -14,7 +14,7 @@ namespace Skaf.IO.Config
         /// <param name="jsonText">The JSON text to deserialize</param>
         /// <returns>The newly created configuration object</returns>
         public static Configuration Deserialize(string jsonText) =>
-            JsonConvert.DeserializeObject<Configuration>(jsonText);
+            JsonConvert.DeserializeObject<Configuration>(jsonText, settings);
 
         /// <summary>
         /// Serializes a configuration object into some JSON text
@@ -22,11 +22,12 @@ namespace Skaf.IO.Config
         /// <param name="config">The configuration object to serialize</param>
         /// <returns>The JSON text that represents the configuration object</returns>
         public static string Serialize(Configuration config) =>
-            JsonConvert.SerializeObject(config);
+            JsonConvert.SerializeObject(config, settings);
 
         private static JsonSerializerSettings settings = new JsonSerializerSettings()
         {
-            Formatting = Formatting.Indented
+            Formatting = Formatting.Indented,
+            ObjectCreationHandling = ObjectCreationHandling.Replace
         };
     }
 }
