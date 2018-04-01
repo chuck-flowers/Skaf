@@ -25,7 +25,7 @@ namespace Skaf.Orchestration.Generate
             {
                 string fullPath = Path.GetFullPath(Path.Combine(GenerateConfig.Root, test.ParentType.Path));
                 TestFileWriter writer = new TestFileWriter(fullPath);
-                writer.Write(method);
+                writer.Write(test);
             }
         }
     }
