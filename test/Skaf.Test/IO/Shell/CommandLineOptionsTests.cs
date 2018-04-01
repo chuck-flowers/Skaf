@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using Skaf.IO.Shell;
 using Xunit;
 using CommandLineEvaluator = System.Func<Skaf.IO.Shell.CommandLineOptions, bool>;
@@ -23,7 +24,7 @@ namespace TeskSketch.Test.IO.Shell
 
         [Theory]
         [MemberData(nameof(ParseTestInput))]
-        public void ParseTest(string[] args, CommandLineEvaluator eval)
+        public void ParseArgsTest(string[] args, Func<CommandLineOptions, bool> eval)
         {
             CommandLineOptions options = CommandLineOptions.ParseArgs(args);
             Assert.True(eval(options));
