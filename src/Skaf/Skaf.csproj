@@ -3,10 +3,19 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    
+    <!-- .NET Global Tool Properties -->
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>skaf</ToolCommandName>
+    
+    <!-- Nuget Package Properties -->
+    <Version>0.0.0</Version>
+    <Authors>Timothy Flowers</Authors>
+    <Description>A command line utility used to automatically generate unit tests.</Description>
+    <RepositoryUrl>http://github.com/chuck-flowers/Skaf</RepositoryUrl>
   </PropertyGroup>
 
+  <!-- Nuget Package Dependencies -->
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.2.1" />
     <PackageReference Include="DotLiquid" Version="2.0.254" />
