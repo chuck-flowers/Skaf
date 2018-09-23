@@ -12,13 +12,13 @@ namespace TeskSketch.Test.IO.Shell
         {
             new object[]
             {
-                new string[] { "-c", "config.json" },
-                (CommandLineEvaluator) (o => o.ConfigFile.Equals("config.json"))
+                new string[] { "update", "-c", "config.json" },
+                (CommandLineEvaluator) (o => o is UpdateOptions u ? u.ConfigFile.Equals("config.json") : false)
             },
             new object[]
             {
                 new string[] { "--config", "config.json" },
-                (CommandLineEvaluator) (o => o.ConfigFile.Equals("config.json"))
+                (CommandLineEvaluator) (o => o is UpdateOptions u ? u.ConfigFile.Equals("config.json") : false)
             }
         };
 
