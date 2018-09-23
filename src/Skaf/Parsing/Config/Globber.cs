@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Extensions.FileSystemGlobbing;
+using System.IO;
+using System.Linq;
 
 namespace Skaf.Parsing.Config
 {
@@ -9,8 +10,7 @@ namespace Skaf.Parsing.Config
     public static class Globber
     {
         /// <summary>
-        /// Finds all the paths within a directory that matches the
-        /// given pattern
+        /// Finds all the paths within a directory that matches the given pattern
         /// </summary>
         /// <param name="baseDir">The directory to search for the files within</param>
         /// <param name="pattern">The pattern that is used to match files within the baseDir</param>
@@ -19,18 +19,12 @@ namespace Skaf.Parsing.Config
             ExpandPath(baseDir, new string[] { pattern });
 
         /// <summary>
-        /// Finds all the paths within a directory that matches one of the
-        /// given patterns
+        /// Finds all the paths within a directory that matches one of the given patterns
         /// </summary>
         /// <param name="baseDir">The directory to search for the files within</param>
         /// <param name="pattern">The patterns that are used to match files within the baseDir</param>
         /// <returns>Each of the files that matches one of the patterns</returns>
-
-        public static IEnumerable<string> ExpandPath(string baseDir, IEnumerable<string> patterns)
-        {
-            Matcher matcher = new Matcher();
-            matcher.AddIncludePatterns(patterns);
-            return matcher.GetResultsInFullPath(baseDir);
-        }
+        public static IEnumerable<string> ExpandPath(string baseDir, IEnumerable<string> patterns) => patterns
+            .SelectMany(p => Directory.EnumerateFiles(baseDir, p, SearchOption.AllDirectories));
     }
 }
