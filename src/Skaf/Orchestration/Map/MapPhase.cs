@@ -21,17 +21,10 @@ namespace Skaf.Orchestration.Map
 
         public IEnumerable<(MethodMetadata, MethodMetadata)> Execute()
         {
-            Console.WriteLine("MAP");
             var testProjectRoot = Path.Combine("..", "..", "test");
             testProjectRoot = Path.GetFullPath(testProjectRoot);
 
-            var toRet = Types.Select(m => (m, MakeTestMethod(m)));
-
-            foreach (var (method, test) in toRet)
-                Console.WriteLine($"Mapped {method} => {test}");
-            Console.WriteLine();
-
-            return toRet;
+            return Types.Select(m => (m, MakeTestMethod(m)));
         }
 
         private MethodMetadata MakeTestMethod(MethodMetadata sourceMethod)

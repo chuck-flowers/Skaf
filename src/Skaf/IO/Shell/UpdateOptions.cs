@@ -5,12 +5,21 @@ namespace Skaf.IO.Shell
     [Verb("update", HelpText = "Generates tests based on the input/source files.")]
     public class UpdateOptions : CommandLineOptions
     {
-        [Option('c', "config", HelpText = "The file that contains the configuration for how the tests are generated")]
-        public string ConfigFile { get; set; }
+        /// <summary>
+        /// The relative path to the configuration to use for running the update command.
+        /// </summary>
+        [Option('c', "config", HelpText = ConfigHelpText)]
+        public string ConfigFile { get; set; } = "./skaf.json";
 
-        [Option('w', "watch", HelpText = "Specifies that the command should automatically rerun when files change")]
-        public bool IsWatchMode { get; set; }
+        /// <summary>
+        /// A flag indicating whether the skaf should be automatically run again when the inputs
+        /// change on disk.
+        /// </summary>
+        [Option('w', "watch", HelpText = WatchHelpText)]
+        public bool IsWatchMode { get; set; } = false;
 
         private const string ConfigHelpText = "The file that contains the configuration options for generating tests";
+
+        private const string WatchHelpText = "Specifies that the command should automatically rerun when files change";
     }
 }

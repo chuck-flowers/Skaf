@@ -16,8 +16,8 @@ namespace Skaf.Orchestration
 
         public void Execute()
         {
-            var inputTypes = new InputPhase(BaseDirectory, Configuration.InputConfig).Execute().ToList();
-            var mappings = new MapPhase(inputTypes, Configuration.MapConfig).Execute().ToList();
+            var methods = new InputPhase(BaseDirectory, Configuration.InputConfig).Execute().ToList();
+            var mappings = new MapPhase(methods, Configuration.MapConfig).Execute().ToList();
             new GeneratePhase(mappings, Configuration.GenerateConfig).Execute();
         }
 

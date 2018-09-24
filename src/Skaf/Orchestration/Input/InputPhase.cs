@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Skaf.IO.Config.Input;
 using Skaf.IO.SourceCode;
@@ -25,22 +23,11 @@ namespace Skaf.Orchestration.Input
         {
             var globStrings = MakeGlobStrings();
             var sourceFilePaths = Globber.ExpandPath(BaseDirectory, globStrings);
-            var methodMetadata = ParseMethods(sourceFilePaths);
-
-            foreach (var m in methodMetadata)
-                Console.WriteLine("Parsed " + m);
-            Console.WriteLine();
-
-            return methodMetadata;
+            return ParseMethods(sourceFilePaths);
         }
 
-        private IEnumerable<string> MakeGlobStrings()
-        {
-            Console.WriteLine("INPUT");
-            return Configuration
-                .SourceFileRules
-                .Select(r => Path.Combine(Configuration.SourcePath, r.Include));
-        }
+        private IEnumerable<string> MakeGlobStrings() => Configuration.SourceFileRules
+            .Select(r => r.Include);
 
         private IEnumerable<MethodMetadata> ParseMethods(IEnumerable<string> sourceFilePaths)
         {

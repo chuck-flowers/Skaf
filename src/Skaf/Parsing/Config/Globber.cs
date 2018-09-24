@@ -24,7 +24,10 @@ namespace Skaf.Parsing.Config
         /// <param name="baseDir">The directory to search for the files within</param>
         /// <param name="pattern">The patterns that are used to match files within the baseDir</param>
         /// <returns>Each of the files that matches one of the patterns</returns>
-        public static IEnumerable<string> ExpandPath(string baseDir, IEnumerable<string> patterns) => patterns
-            .SelectMany(p => Directory.EnumerateFiles(baseDir, p, SearchOption.AllDirectories));
+        public static IEnumerable<string> ExpandPath(string baseDir, IEnumerable<string> patterns) =>
+            patterns.SelectMany(p => ResolveGlob(baseDir, p));
+
+        private static IEnumerable<string> ResolveGlob(string baseDir, string glob) =>
+            Directory.EnumerateFiles(baseDir, glob, SearchOption.AllDirectories);
     }
 }

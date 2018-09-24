@@ -1,8 +1,9 @@
-﻿namespace Skaf.IO.SourceCode.Metadata
+﻿using System;
+
+namespace Skaf.IO.SourceCode.Metadata
 {
     /// <summary>
-    /// Represents all the metadata for a method that is
-    /// extracted from a code file
+    /// Represents all the metadata for a method that is extracted from a code file
     /// </summary>
     public class MethodMetadata
     {
@@ -12,8 +13,8 @@
         /// <param name="name">The name of the method</param>
         public MethodMetadata(string name, TypeMetadata parentType)
         {
-            Name = name;
-            ParentType = parentType;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            ParentType = parentType ?? throw new ArgumentNullException(nameof(parentType));
         }
 
         /// <summary>
