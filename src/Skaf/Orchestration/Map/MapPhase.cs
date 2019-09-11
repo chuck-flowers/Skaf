@@ -59,9 +59,14 @@ namespace Skaf.Orchestration.Map
         {
             TypeMetadata srcType = sourceMethod.ParentType;
 
+            // Calculates the two portions of the namespace
+            int rootNamespaceLength = srcType.Namespace.IndexOf('.');
+            var rootNamespace = srcType.Namespace.Substring(0, rootNamespaceLength);
+            var stemNamespace = srcType.Namespace.Substring(rootNamespaceLength + 1);
+
             // Generates the new values for the test method
-            var testPath = srcType.Path;
-            var testNamespace = srcType.Namespace;
+            var testPath = $"{srcType.Path}";
+            var testNamespace = $"{rootNamespace}.Test.{stemNamespace}";
             var testTypeName = $"{srcType.Name}Tests";
             var testName = $"{sourceMethod.Name}Test";
 
