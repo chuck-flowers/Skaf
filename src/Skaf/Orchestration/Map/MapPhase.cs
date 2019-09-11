@@ -57,12 +57,16 @@ namespace Skaf.Orchestration.Map
         /// <returns>The generated test method.</returns>
         private MethodMetadata MakeTestMethod(MethodMetadata sourceMethod)
         {
-            foreach (var rule in MapConfig.MappingRules)
-                if (rule.Input.Matches(sourceMethod))
-                    return rule.Output.GenerateTest(sourceMethod);
+            TypeMetadata srcType = sourceMethod.ParentType;
 
-            //TODO: Throw exception
-            return null;
+            // Generates the new values for the test method
+            var testPath = srcType.Path;
+            var testNamespace = srcType.Namespace;
+            var testTypeName = $"{srcType.Name}Tests";
+            var testName = $"{sourceMethod.Name}Test";
+
+            var testType = new TypeMetadata(testPath, testNamespace, testTypeName);
+            return new MethodMetadata(testName, testType);
         }
     }
 }
