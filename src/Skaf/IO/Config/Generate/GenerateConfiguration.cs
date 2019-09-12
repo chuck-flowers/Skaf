@@ -4,7 +4,7 @@ namespace Skaf.IO.Config.Generate
 {
     public class GenerateConfiguration
     {
-        [JsonProperty("root")]
-        public string Root { get; set; } = "../../test";
+        [JsonProperty("root", Required = Required.Always)]
+        public string Root { get; set; }
     }
 }

@@ -5,16 +5,7 @@
       { "include": "**.cs" }
     ]
   },
-  "map": {
-    "rules": [
-      {
-        "output": {
-          "path": "{% assign nsLength = namespace.size %}Skaf.Test/{{namespace | slice: 5, (nsLength - 5) | replace: \"\\.\", \"/\"}}/{{type}}Tests.cs",
-          "namespace": "{% assign nsLength = namespace.size %}Skaf.Test.{{namespace | slice: 5, (nsLength - 5)}}",
-          "type": "{{type}}Tests",
-          "method": "{{method}}Test"
-        }
-      }
-    ]
+  "generate": {
+    "root":  "../../test/Skaf.Test"
   }
 }

@@ -27,7 +27,7 @@ namespace Skaf.Orchestration.Input
         }
 
         private IEnumerable<string> MakeGlobStrings() => Configuration.SourceFileRules
-            .Select(r => r.Include);
+            .Select(r => r.Include ?? "");
 
         private IEnumerable<MethodMetadata> ParseMethods(IEnumerable<string> sourceFilePaths)
         {

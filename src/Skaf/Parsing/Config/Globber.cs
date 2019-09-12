@@ -28,6 +28,6 @@ namespace Skaf.Parsing.Config
             patterns.SelectMany(p => ResolveGlob(baseDir, p));
 
         private static IEnumerable<string> ResolveGlob(string baseDir, string glob) =>
-            Directory.EnumerateFiles(baseDir, glob, SearchOption.AllDirectories);
+            Directory.EnumerateFiles(baseDir, glob, SearchOption.AllDirectories).Select(p => Path.GetRelativePath(baseDir, p));
     }
 }
