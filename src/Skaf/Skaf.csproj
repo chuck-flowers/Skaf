@@ -19,6 +19,7 @@
     <RepositoryUrl>http://github.com/chuck-flowers/Skaf</RepositoryUrl>
     <ApplicationIcon />
     <StartupObject />
+    <AssemblyName>dotnet-skaf</AssemblyName>
   </PropertyGroup>
 
   <!-- Nuget Package Dependencies -->
