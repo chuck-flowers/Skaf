@@ -22,7 +22,7 @@ namespace Skaf.Parsing.Code
 
         private class CSharpMetadataWalker : CSharpSyntaxWalker
         {
-            public CodeFile CodeFile { get; set; }
+            public CodeFile? CodeFile { get; set; }
 
             public IEnumerable<MethodMetadata> ExtractedMetadata => extractedMetadata;
 
@@ -45,7 +45,7 @@ namespace Skaf.Parsing.Code
                     return;
 
                 var typeName = node.Identifier.Text;
-                var typeMetadata = new TypeMetadata(CodeFile.Path, namespaceText, typeName);
+                var typeMetadata = new TypeMetadata(CodeFile!.Path, namespaceText, typeName);
 
                 var publicMethods = node.Members
                     .OfType<MethodDeclarationSyntax>()
@@ -54,9 +54,9 @@ namespace Skaf.Parsing.Code
                     extractedMetadata.AddLast(ExtractMethodMetadata(methodNode, typeMetadata));
             }
 
-            private LinkedList<MethodMetadata> extractedMetadata = new LinkedList<MethodMetadata>();
+            private readonly LinkedList<MethodMetadata> extractedMetadata = new LinkedList<MethodMetadata>();
         }
 
-        private CSharpMetadataWalker walker = new CSharpMetadataWalker();
+        private readonly CSharpMetadataWalker walker = new CSharpMetadataWalker();
     }
 }

@@ -6,9 +6,9 @@ namespace Skaf.IO.Config.Input
     public class InputConfiguration
     {
         [JsonProperty("files")]
-        public IEnumerable<SourceFileRule> SourceFileRules { get; set; }
+        public IEnumerable<SourceFileRule>? SourceFileRules { get; set; }
 
         [JsonProperty("src")]
-        public string SourcePath { get; set; }
+        public string? SourcePath { get; set; }
     }
 }

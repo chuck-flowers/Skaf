@@ -18,20 +18,16 @@ namespace Skaf.IO.SourceCode.Writers
             TestFilePath = testFilePath ?? throw new ArgumentNullException(nameof(testFilePath));
         }
 
-        public MethodMetadata Test { get; private set; }
-
         public string TestFilePath { get; }
 
         public void Write(MethodMetadata test)
         {
-            Test = test;
-
             //Create the structure
-            CompilationUnitSyntax compilationUnit = null;
+            CompilationUnitSyntax? compilationUnit = null;
             if (File.Exists(TestFilePath))
                 compilationUnit = (CompilationUnitSyntax)CSharpSyntaxTree.ParseText(File.ReadAllText(TestFilePath)).GetRoot();
 
-            compilationUnit = CreateCompilationUnit(compilationUnit);
+            compilationUnit = CreateCompilationUnit(test, compilationUnit);
 
             //Write the structure
             var formatted = Formatter.Format(compilationUnit, new AdhocWorkspace());
@@ -40,7 +36,7 @@ namespace Skaf.IO.SourceCode.Writers
                 formatted.WriteTo(writer);
         }
 
-        private CompilationUnitSyntax CreateCompilationUnit(CompilationUnitSyntax compilationUnit)
+        private CompilationUnitSyntax CreateCompilationUnit(MethodMetadata test, CompilationUnitSyntax? compilationUnit)
         {
             if (compilationUnit == null)
                 compilationUnit = CompilationUnit();
@@ -87,7 +83,7 @@ namespace Skaf.IO.SourceCode.Writers
             var oldNsDeclaration = oldMembers
                 .OfType<NamespaceDeclarationSyntax>()
                 .FirstOrDefault();
-            var newNsDeclaration = CreateNameSpaceSyntax(oldNsDeclaration);
+            var newNsDeclaration = CreateNameSpaceSyntax(test, oldNsDeclaration);
 
             var newMembers = oldNsDeclaration != null ?
                 oldMembers.Replace(oldNsDeclaration, newNsDeclaration) :
@@ -114,16 +110,16 @@ namespace Skaf.IO.SourceCode.Writers
                 ).WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)));
         }
 
-        private NamespaceDeclarationSyntax CreateNameSpaceSyntax(NamespaceDeclarationSyntax namespaceDeclaration)
+        private NamespaceDeclarationSyntax CreateNameSpaceSyntax(MethodMetadata test, NamespaceDeclarationSyntax namespaceDeclaration)
         {
             if (namespaceDeclaration == null)
-                namespaceDeclaration = NamespaceDeclaration(IdentifierName(Test.ParentType.Namespace));
+                namespaceDeclaration = NamespaceDeclaration(IdentifierName(test.ParentType.Namespace));
 
             var oldMembers = namespaceDeclaration.Members;
             var oldClass = oldMembers
                 .OfType<ClassDeclarationSyntax>()
                 .FirstOrDefault();
-            var newClass = CreateTestClass(oldClass);
+            var newClass = CreateTestClass(test, oldClass);
 
             var newMembers = oldClass != null ?
                 oldMembers.Replace(oldClass, newClass) :
@@ -132,16 +128,16 @@ namespace Skaf.IO.SourceCode.Writers
             return namespaceDeclaration.WithMembers(newMembers);
         }
 
-        private ClassDeclarationSyntax CreateTestClass(ClassDeclarationSyntax classDeclaration)
+        private ClassDeclarationSyntax CreateTestClass(MethodMetadata test, ClassDeclarationSyntax classDeclaration)
         {
             //If the class declaration does not already exist, create it
             if (classDeclaration == null)
-                classDeclaration = ClassDeclaration(Test.ParentType.Name)
+                classDeclaration = ClassDeclaration(test.ParentType.Name)
                     .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)));
 
             //If the type does not already have a definition for the method, create one
-            if (!classDeclaration.Members.OfType<MethodDeclarationSyntax>().Any(d => d.Identifier.Text.Equals(Test.Name)))
-                classDeclaration = classDeclaration.AddMembers(CreateMethodSyntax(Test));
+            if (!classDeclaration.Members.OfType<MethodDeclarationSyntax>().Any(d => d.Identifier.Text.Equals(test.Name)))
+                classDeclaration = classDeclaration.AddMembers(CreateMethodSyntax(test));
 
             return classDeclaration;
         }

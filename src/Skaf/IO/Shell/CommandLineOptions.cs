@@ -14,13 +14,12 @@ namespace Skaf.IO.Shell
         /// <returns>The CommandLineOptions parsed and constructed into an object</returns>
         public static CommandLineOptions ParseArgs(string[] args)
         {
-            CommandLineOptions options = null;
+            CommandLineOptions? options = null;
             Parser.Default.ParseArguments<InitOptions, UpdateOptions>(args)
                 .WithParsed<InitOptions>(init => options = init)
-                .WithParsed<UpdateOptions>(update => options = update)
-                .WithNotParsed(errs => throw new Exception("There was a problem parsing the command line arguments"));
+                .WithParsed<UpdateOptions>(update => options = update);
 
-            return options;
+            return options ?? throw new Exception("There was a problem parsing the command line arguments");
         }
     }
 

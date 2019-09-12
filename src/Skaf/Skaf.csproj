@@ -4,6 +4,10 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     
+    <!-- Language Properties -->
+    <Nullable>enable</Nullable>
+    <LangVersion>8.0</LangVersion>
+    
     <!-- .NET Global Tool Properties -->
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>skaf</ToolCommandName>

@@ -50,6 +50,6 @@ namespace Skaf.IO.SourceCode
             return extractor.ExtractedMetadata;
         }
 
-        private IEnumerable<MethodMetadata> methods = null;
+        private IEnumerable<MethodMetadata>? methods = null;
     }
 }
