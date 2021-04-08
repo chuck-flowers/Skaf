@@ -1,0 +1,10 @@
+{
+	"build": {
+		"dockerfile": "./Dockerfile.dev"
+	},
+	"extensions": [
+		"ms-dotnettools.csharp",
+		"k--kato.docomment",
+		"jchannon.csharpextensions"
+	]
+}
