@@ -31,7 +31,7 @@ namespace Skaf.IO.SourceCode.Writers
 
             //Write the structure
             var formatted = Formatter.Format(compilationUnit, new AdhocWorkspace());
-            Directory.CreateDirectory(Path.GetDirectoryName(TestFilePath));
+            Directory.CreateDirectory(Path.GetDirectoryName(TestFilePath) ?? "");
             using (var writer = File.CreateText(TestFilePath))
                 formatted.WriteTo(writer);
         }
@@ -110,7 +110,7 @@ namespace Skaf.IO.SourceCode.Writers
                 ).WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)));
         }
 
-        private NamespaceDeclarationSyntax CreateNameSpaceSyntax(MethodMetadata test, NamespaceDeclarationSyntax namespaceDeclaration)
+        private NamespaceDeclarationSyntax CreateNameSpaceSyntax(MethodMetadata test, NamespaceDeclarationSyntax? namespaceDeclaration)
         {
             if (namespaceDeclaration == null)
                 namespaceDeclaration = NamespaceDeclaration(IdentifierName(test.ParentType.Namespace));
@@ -128,7 +128,7 @@ namespace Skaf.IO.SourceCode.Writers
             return namespaceDeclaration.WithMembers(newMembers);
         }
 
-        private ClassDeclarationSyntax CreateTestClass(MethodMetadata test, ClassDeclarationSyntax classDeclaration)
+        private ClassDeclarationSyntax CreateTestClass(MethodMetadata test, ClassDeclarationSyntax? classDeclaration)
         {
             //If the class declaration does not already exist, create it
             if (classDeclaration == null)

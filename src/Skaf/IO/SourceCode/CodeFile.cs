@@ -20,7 +20,7 @@ namespace Skaf.IO.SourceCode
         /// The name of the directory the file is located in (path without
         /// the file name)
         /// </summary>
-        public string Directory => System.IO.Path.GetDirectoryName(Path);
+        public string Directory => System.IO.Path.GetDirectoryName(Path) ?? "";
 
         /// <summary>
         /// All the TypeMetadata contained within the specified code file.

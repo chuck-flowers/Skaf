@@ -12,7 +12,7 @@ namespace Skaf.IO.Config
     public class Configuration
     {
         [JsonProperty("generate", Required = Required.Always)]
-        public GenerateConfiguration GenerateConfig { get; set; }
+        public GenerateConfiguration GenerateConfig { get; set; } = new GenerateConfiguration();
 
         /// <summary>
         /// Represents the array of glob patterns that the user
